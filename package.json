@@ -1,0 +1,27 @@
+{
+  "name": "level-mget",
+  "version": "1.0.0",
+  "description": "get multiple keys leveldb",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hij1nx/level-mget.git"
+  },
+  "author": "hij1nx",
+  "contributors": [
+    "Julian Gruber <julian@juliangruber.com> (https://github.com/juliangruber)",
+    "Paolo Fragomeni <paolo@async.ly> (https://github.com/hij1nx"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hij1nx/level-mget/issues"
+  },
+  "homepage": "https://github.com/hij1nx/level-mget",
+  "devDependencies": {
+    "level": "^0.18.0",
+    "rimraf": "^2.2.8"
+  }
+}
