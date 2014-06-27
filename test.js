@@ -21,6 +21,20 @@ rimraf('./db', function(err) {
     mget(db, ['0', '1', '2'], function(err, values) {
       assert(!err);
       assert(Object.keys(values).length == 3);
-    })
+    });
+
+    mget(db, ['foo', '0'], function(err, values) {
+      assert(err);
+    });
+
+    errors = 0;
+    function assert_fail(err, values) {
+      assert(err);
+      errors++;
+      if (errors > 1) assert(false, 'too many errors');
+    }
+
+    mget(db, ['foo', 'bar'], assert_fail);
   });
 });
+
