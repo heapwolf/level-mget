@@ -4,17 +4,19 @@ module.exports = function mget(db, keys, cb) {
   var error;
   var todo = keys.length;
 
-  for (var i = 0; i < keys.length; i++) (function(key){
+  for (var i = 0; i < keys.length; i++) (function(key) {
 
-    db.get(key, function(err, value){
-      if (err) {
-        return error = err;
+    db.get(key, function(err, value) {
+      error = err;
+
+      if (error) {
+        if (--todo) return;
+        return cb(error);
       }
 
       values[key] = value;
 
       if (!--todo) {
-        if (error) return cb(err);
         cb(null, values);
       }
     });
