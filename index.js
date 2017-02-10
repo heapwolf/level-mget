@@ -1,25 +1,21 @@
-module.exports = function mget(db, keys, cb) {
-
-  var values = {};
+module.exports = function mget (db, keys, cb) {
+  var values = new Map();
   var error;
   var todo = keys.length;
 
-  for (var i = 0; i < keys.length; i++) (function(key) {
-
-    db.get(key, function(err, value) {
-      error = err;
-
+  keys.forEach(function (key) {
+    db.get(key, function (err, value) {
+      error = error || err;
       if (error) {
         if (--todo) return;
         return cb(error);
       }
 
-      values[key] = value;
+      values.set(key, value);
 
       if (!--todo) {
         cb(null, values);
       }
     });
-  }(keys[i]));
+  });
 };
-

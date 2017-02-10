@@ -2,14 +2,9 @@ var level = require('level');
 var mget = require('./index');
 var rimraf = require('rimraf');
 var assert = require('assert');
-var fs = require('fs');
-
-try {
-  fs.mkdirSync('./db');
-} catch(ex) {}
+var bytewise = require('bytewise');
 
 rimraf('./db', function(err) {
-
   var db = level('./db');
   db.batch([
     { type: 'put', key: '0', value: 0 },
@@ -20,7 +15,7 @@ rimraf('./db', function(err) {
 
     mget(db, ['0', '1', '2'], function(err, values) {
       assert(!err);
-      assert(Object.keys(values).length == 3);
+      assert.equal(values.size, 3);
     });
 
     mget(db, ['foo', '0'], function(err, values) {
@@ -35,6 +30,27 @@ rimraf('./db', function(err) {
     }
 
     mget(db, ['foo', 'bar'], assert_fail);
+  });
+});
+
+rimraf('./db2', function(err) {
+  var db = level('./db2', {
+    keyEncoding: bytewise
+  });
+  db.batch([
+    { type: 'put', key: ['foo', 0], value: 0 },
+    { type: 'put', key: ['foo', 1], value: 1 }
+  ], function(err) {
+    assert(!err);
+
+	var k1 = ['foo', 0];
+	var k2 = ['foo', 1];
+    mget(db, [k1, k2], function(err, values) {
+      assert(!err);
+      assert.equal(values.size, 2);
+      assert.equal(values.get(k1), 0);
+      assert.equal(values.get(k2), 1);
+    });
   });
 });
 
