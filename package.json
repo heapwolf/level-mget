@@ -1,6 +1,6 @@
 {
   "name": "level-mget",
-  "version": "1.0.2",
+  "version": "2.0.0",
   "description": "get multiple keys leveldb",
   "main": "index.js",
   "scripts": {

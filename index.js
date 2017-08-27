@@ -1,21 +1,22 @@
 module.exports = function mget (db, keys, cb) {
-  var values = new Map();
-  var error;
-  var todo = keys.length;
+  const values = new Map()
+  const errors = new Map()
 
-  keys.forEach(function (key) {
-    db.get(key, function (err, value) {
-      error = error || err;
-      if (error) {
-        if (--todo) return;
-        return cb(error);
+  let todo = keys.length
+
+  const done = () => cb(errors.size ? errors : null, values)
+
+  keys.forEach(key => {
+    db.get(key, (err, value) => {
+      if (err) {
+        errors.set(key, err)
+        if (--todo) return
+        return done()
       }
 
-      values.set(key, value);
+      values.set(key, value)
 
-      if (!--todo) {
-        cb(null, values);
-      }
-    });
-  });
-};
+      if (!--todo) done()
+    })
+  })
+}
